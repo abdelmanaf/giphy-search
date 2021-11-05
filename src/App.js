@@ -6,11 +6,12 @@ class App extends Component {
       super(props)
 
       this.state = {
-        baseURL: 'http://www.omdbapi.com/?',
-        apikey: 'apikey=769a6138',
-        query: '&t=',
-        movieTitle: '',
-        searchURL: ''
+        baseURL: 'https://api.giphy.com/v1/gifs/search?',
+        apikey: 'api_key=SFW7z8A1bPMbS3lZYeV6Nl9Y7G4CpUGH',
+        query: '&q=',
+        giphyTitle: '',
+        searchURL: '',
+        limit: '&limit=2&offset=0&rating=g&lang=en'
       }
   }
 
@@ -20,13 +21,14 @@ class App extends Component {
   handleSubmit = (event)=> {
     event.preventDefault()
     this.setState({
-      searchURL: this.state.baseURL + this.state.apikey + this.state.query +  this.state.movieTitle
-    }, () => {
+      searchURL: this.state.baseURL + this.state.apikey + this.state.query +  this.state.giphyTitle + this.state.limit
+    }
+    , () => {
       fetch(this.state.searchURL)
         .then(res => res.json())
         .then(json => this.setState({
-          movie: json,
-          movieTitle: ''
+          giphy: json,
+          giphyTitle: ''
         }))
         .catch(err => console.error(err))
     })
@@ -36,40 +38,22 @@ class App extends Component {
     return (
       <>
         <form onSubmit={this.handleSubmit}>
-          <label htmlFor='movieTitle'>Title</label>
+          <label>Title</label>
           <input
-            id='movieTitle'
+            id='giphyTitle'
             type='text'
-            value={this.state.movieTitle}
+            value={this.state.giphyTitle}
             onChange={this.handleChange}
           />
           <input
             type='submit'
-            value='Find Movie Info'
+            value='Find Giphy'
           />
         </form>
-
-        {
-          (this.state.movie) ? <MovieInfo movie={this.state.movie} />  : ''
-        }
-        
+        <a href={this.state.searchURL}>{this.state.searchURL}</a>
       </>
     );
   } 
-}
-
-class MovieInfo extends Component {
-  render () {
-    return  (
-      <div>
-        <h1>Title: {this.props.movie.Title}</h1>
-        <h2>Year: {this.props.movie.Year}</h2>
-        <img src={this.props.movie.Poster} alt={this.props.movie.Title}/>
-        <h3>Genre: {this.props.movie.Genre}</h3>
-        <h4>Plot: {this.props.movie.Plot}</h4>
-      </div>
-    )
-  }
 }
 
 export default App;
