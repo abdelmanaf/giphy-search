@@ -27,7 +27,7 @@ class App extends Component {
       fetch(this.state.searchURL)
         .then(res => res.json())
         .then(json => this.setState({
-          giphy: json,
+          giph: json,
           giphyTitle: ''
         }))
         .catch(err => console.error(err))
@@ -50,10 +50,27 @@ class App extends Component {
             value='Find Giphy'
           />
         </form>
-        <a href={this.state.searchURL}>{this.state.searchURL}</a>
+        {/* <a href={this.state.searchURL}>{this.state.searchURL}</a> */}
+        
+        {
+          (this.state.giph) ? <GiphyInfo giph={this.state.giph.data} />  : ''
+        }
       </>
     );
   } 
+}
+
+class GiphyInfo extends Component {
+  render () {
+    return  (
+      <div>
+      {this.props.giph.map((gif, idx) => (
+          <img key={idx} src={gif.images.original.url} alt=''/>
+        ))
+      }
+      </div>
+    )
+  }
 }
 
 export default App;
